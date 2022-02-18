@@ -1,4 +1,16 @@
 import { Event } from "./core/event";
+import { Configuration, TokenApi } from "@dustlight/auth-client-axios-js"
+import { NotificationsApi, BasicNotification } from "@dustlight/messenger-client-axios-js"
+
+interface Token {
+    "access_token": string | undefined,
+    "token_type": string | undefined,
+    "expires_in": number | undefined,
+    "scope": string | undefined,
+    "jti": string | undefined,
+    "expires_at": Date
+    "isExpired": () => boolean
+}
 
 /**
  * 初始化钩子
@@ -6,7 +18,7 @@ import { Event } from "./core/event";
  * @param config 配置
  */
 function init(config: any) {
-    console.log(config);
+
 }
 
 /**
@@ -18,12 +30,48 @@ function init(config: any) {
  * @returns 
  */
 function main(event: Event, context: any, config: any): any {
-    let result = {}
-    result["date"] = new Date()
-    result["event.data"] = event.data
-    result["query"] = event.extensions.request.query
-    result["context"] = context
-    return result
+    let data = event.data
+    let header = data.customHeaders
+
+    let clientId = header.client_id
+    let clientSecret = header.client_secret
+    let channelId = data.channel_id
+    let templateId = data.template_id
+
+    let tokenApi = new TokenApi(new Configuration({
+        basePath: config.api.auth,
+        username: clientId,
+        password: clientSecret
+    }))
+    return tokenApi.grantJws(null, "client_credentials")
+        .then(accessToken => {
+            let expirdAt = new Date(new Date().getTime() + accessToken.data["expires_in"] * 1000)
+            let token: Token = {
+                access_token: accessToken.data["access_token"],
+                token_type: accessToken.data["token_type"],
+                expires_in: accessToken.data["expires_in"],
+                expires_at: expirdAt,
+                scope: accessToken.data.scope + "",
+                jti: accessToken.data["jti"],
+                isExpired: () => new Date() > expirdAt
+            }
+            return token;
+        })
+        .then(token => {
+
+            let c = new Configuration({
+                basePath: config.api.messenger,
+                accessToken: token.access_token
+            })
+
+            let notifyApi = new NotificationsApi(c)
+            let notification: BasicNotification = {
+                channelId: channelId,
+                templateId: templateId,
+                content: data
+            }
+            return notifyApi.createNotification(notification).then(res => res.data)
+        })
 }
 
 export {

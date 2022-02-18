@@ -1,9 +1,17 @@
 const config = {
     "development": {
-        "key": "value-dev"
+        "env": "dev",
+        "api": {
+            "auth": "https://api.dustlight.cn",
+            "messenger": "https://messenger.dustlight.cn"
+        }
     },
     "production": {
-        "key": "value-prod"
+        "env": "prod",
+        "api": {
+            "auth": "https://api.dustlight.cn",
+            "messenger": "https://messenger.dustlight.cn"
+        }
     }
 };
 if (process.env.mode != null)

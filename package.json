@@ -1,11 +1,11 @@
 {
-  "name": "@dustlight/serverless-fun-nodejs-example",
+  "name": "@dustlight/serverless-fun-message",
   "version": "1.0.0",
-  "description": "Demo project for serverless-fun",
+  "description": "Message Function",
   "private": true,
   "dependencies": {
-    "@dustlight/serverless-fun": "0.0.3-alpha",
-    "typescript": "^4.3.5"
+    "@dustlight/auth-client-axios-js": "^1.1.1-alpha",
+    "@dustlight/messenger-client-axios-js": "^0.0.4-alpha-1"
   },
   "engines": {
     "node": ">=10.0.0"
@@ -19,12 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dustlight-cn/serverless-fun-nodejs-template.git"
+    "url": "git+https://github.com/dustlight-cn/serverless-fun-message.git"
   },
   "author": "Hansin1997",
   "license": "MIT",
   "devDependencies": {
     "@dustlight/serverless-fun-offline": "0.0.3-alpha",
-    "@types/node": "^16.3.2"
+    "@dustlight/serverless-fun": "0.0.3-alpha",
+    "@types/node": "^16.3.2",
+    "typescript": "^4.3.5"
   }
 }

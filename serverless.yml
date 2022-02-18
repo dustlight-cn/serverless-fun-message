@@ -1,10 +1,10 @@
-service: hello
+service: message
 
 frameworkVersion: '2'
 
 provider:
   name: fun
-  handler: sl_handler.handler
+  handler: jobless_handler.handler
   runtime: nodejs14
 plugins:
   - "@dustlight/serverless-fun"
@@ -12,5 +12,4 @@ plugins:
 
 package:
   exclude:
-    - src/**
     - package-lock.json
