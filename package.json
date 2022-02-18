@@ -1,0 +1,30 @@
+{
+  "name": "@dustlight/serverless-fun-nodejs-example",
+  "version": "1.0.0",
+  "description": "Demo project for serverless-fun",
+  "private": true,
+  "dependencies": {
+    "@dustlight/serverless-fun": "0.0.3-alpha",
+    "typescript": "^4.3.5"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "set mode=development && tsc --build tsconfig.json && serverless offline start",
+    "build": "set mode=production && tsc --build tsconfig.json",
+    "package": "set mode=production && tsc --build tsconfig.json && serverless package",
+    "deploy": "set mode=production  && tsc --build tsconfig.json && serverless deploy",
+    "remove": "serverless remove"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dustlight-cn/serverless-fun-nodejs-template.git"
+  },
+  "author": "Hansin1997",
+  "license": "MIT",
+  "devDependencies": {
+    "@dustlight/serverless-fun-offline": "0.0.3-alpha",
+    "@types/node": "^16.3.2"
+  }
+}

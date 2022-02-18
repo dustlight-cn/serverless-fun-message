@@ -1,0 +1,16 @@
+service: hello
+
+frameworkVersion: '2'
+
+provider:
+  name: fun
+  handler: sl_handler.handler
+  runtime: nodejs14
+plugins:
+  - "@dustlight/serverless-fun"
+  - "@dustlight/serverless-fun-offline"
+
+package:
+  exclude:
+    - src/**
+    - package-lock.json
