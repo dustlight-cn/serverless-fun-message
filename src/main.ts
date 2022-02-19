@@ -21,6 +21,24 @@ function init(config: any) {
 
 }
 
+function processKey(obj: any) {
+    if (!obj || !(obj instanceof Object))
+        return 
+    let keys = []
+    for (let key in obj) {
+        if (key.indexOf('.') > -1)
+            keys.push(key)
+        if (obj[key] instanceof Object)
+            processKey(obj[key])
+    }
+    keys.forEach(key => {
+        let val = obj[key]
+        delete obj[key]
+        let newKey = key.replace('.', '_')
+        obj[newKey] = val
+    })
+}
+
 /**
  * 函数入口
  * 
@@ -32,11 +50,13 @@ function init(config: any) {
 function main(event: Event, context: any, config: any): any {
     let data = event.data
     let header = data.customHeaders
+    let variables = data.variablesAsMap
 
     let clientId = header.client_id
     let clientSecret = header.client_secret
-    let channelId = data.channel_id
-    let templateId = data.template_id
+    let channelId = variables.channel_id
+    let templateId = variables.template_id
+    let input = variables.notification_content
 
     let tokenApi = new TokenApi(new Configuration({
         basePath: config.api.auth,
@@ -65,10 +85,11 @@ function main(event: Event, context: any, config: any): any {
             })
 
             let notifyApi = new NotificationsApi(c)
+            processKey(input)
             let notification: BasicNotification = {
                 channelId: channelId,
                 templateId: templateId,
-                content: data
+                content: input
             }
             return notifyApi.createNotification(notification).then(res => res.data)
         })
