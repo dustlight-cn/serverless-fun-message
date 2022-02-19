@@ -12,4 +12,5 @@ plugins:
 
 package:
   exclude:
+    - doc/**
     - package-lock.json
